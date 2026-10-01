@@ -1,17 +1,72 @@
 # @quario/mcp
 
-**An MCP server that exposes [quario](https://www.npmjs.com/package/quario) as two tools.** An
-agent validates a report definition with `validate_report` and renders one with `render_report`.
-The server runs locally over stdio, and `npx @quario/mcp` starts it.
+**Let an agent turn JSON data into a PDF, Excel, Word, HTML or CSV report.** This MCP server gives
+Claude and other MCP clients two tools. `validate_report` checks a report definition, and
+`render_report` writes it to a file. One definition renders to all five formats, and the agent
+gets back a path, never the file's bytes.
 
-**The server is open source. The engine it runs is not.** This package is Apache-2.0. It installs
-`quario` and the five render targets. Those packages are commercial software under the
-[Quario License](https://getquario.com). Evaluation is free. Without a license key, every render
-carries an unlicensed mark.
+- **Five formats.** One JSON definition renders to `pdf`, `xlsx`, `docx`, `html` and `csv`.
+- **Fixable errors.** Each problem names the path it sits at, such as
+  `data: expected a JSONPath string`. The agent repairs that spot and tries again.
+- **Files, not bytes.** `render_report` writes to disk and returns the path and size. A report
+  costs the agent one line of context, whatever its size.
+- **The host stays in charge.** Query budgets, link schemes, the data root and the output
+  directory come from the launch configuration. No tool argument changes them.
+- **No overwrites.** A name that exists gets `-1`, then `-2`, and so on.
+- **Local.** It runs over stdio, and `npx @quario/mcp` starts it.
 
-## Add it to a client
+A `render_report` call and its result:
 
-Claude Code:
+```json
+{
+  "definition": {
+    "data": "$.orders[*]",
+    "detail": { "columns": [{ "header": "Total", "value": "{{ @.price * @.qty }}" }] }
+  },
+  "target": "pdf",
+  "data": { "orders": [{ "price": 250, "qty": 2 }] },
+  "filename": "orders"
+}
+```
+
+The tool answers `Wrote orders.pdf (1.3 kB): /tmp/quario-mcp/orders.pdf`.
+
+> **The server is open source. The engine it runs is not.** This package is Apache-2.0. It installs
+> [`quario`](https://www.npmjs.com/package/quario) and the five render targets. Those packages are
+> commercial software under the [Quario License](https://getquario.com). Evaluation is free.
+> Without a license key, every render carries an unlicensed mark.
+
+## Contents
+
+- [Getting started](#getting-started)
+- [Configuration](#configuration)
+- [The trust line](#the-trust-line)
+- [`validate_report`](#validate_report)
+- [`render_report`](#render_report)
+- [Not in this release](#not-in-this-release)
+- [Development](#development)
+- [License](#license)
+
+---
+
+## Getting started
+
+**1. Check Node.** The server needs Node 22 or later.
+
+```bash
+node --version
+```
+
+**2. Add the server to your client.** The package carries the engine and the five render targets,
+so there is nothing else to install.
+
+Claude Code, for evaluation without a key:
+
+```bash
+claude mcp add quario -- npx -y @quario/mcp
+```
+
+Claude Code, with a license key:
 
 ```bash
 claude mcp add quario -e QUARIO_LICENSE=quario_... -- npx -y @quario/mcp
@@ -31,7 +86,20 @@ Claude Desktop, in `claude_desktop_config.json`:
 }
 ```
 
-The package carries the engine and the five render targets as dependencies. Node 22 or later.
+Leave out the `env` line to evaluate without a key.
+
+**3. Ask for a report.** Restart the client, then ask the agent for one:
+
+> Render a PDF of these orders with a product column and a total column: Desk, 250, qty 2.
+
+The agent answers with the path of the file it wrote. The file goes to `quario-mcp` under the
+system temp directory unless `QUARIO_OUT_DIR` says otherwise.
+
+**4. Let it read your files (optional).** Inline data works everywhere. To let the agent pass a
+JSON file by `dataPath`, set `QUARIO_DATA_ROOT` to the directory that holds it. Claude Code sets
+`CLAUDE_PROJECT_DIR`, and the server uses that when `QUARIO_DATA_ROOT` is unset.
+
+---
 
 ## Configuration
 
@@ -58,13 +126,15 @@ is the one exception: the server starts, and the output carries the mark.
 
 ## The trust line
 
-The configuration the host sets in the environment is the host. The agent that calls the tools is an author, and the engine
-treats an author as untrusted. So no tool argument reaches a host setting: the query budgets, the
+The configuration the host sets in the environment is the host. The agent that calls the tools
+is an author, and the engine treats an author as untrusted. So no tool argument reaches a host setting: the query budgets, the
 `href` schemes, registered functions, fonts, the license key, the data root and the output
 directory come from the environment alone.
 
 `locale`, `currency`, `timeZone` and the target options are the exception. They change how a
 report looks, not what the server can read, run or write, so a call may set them.
+
+---
 
 ## `validate_report`
 
@@ -135,9 +205,13 @@ Every target writes a file and returns its location, never its content.
 - The result carries `structuredContent` with `{ path, target, bytes }`, and the text
   `Wrote <name> (<size>): <absolute path>`.
 
+---
+
 ## Not in this release
 
 Registered functions, image references by path, host fonts, and remote transport.
+
+---
 
 ## Development
 
@@ -147,6 +221,8 @@ means a green pull request.
 
 [AGENTS.md](AGENTS.md) holds the conventions for this repo. [docs/adr](docs/adr) holds the decisions
 that a reader is most likely to undo.
+
+---
 
 ## License
 
