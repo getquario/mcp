@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "options": {
+    "denyWarnings": true,
+    "typeAware": true
+  },
+  "rules": {
+    "typescript/no-floating-promises": [
+      "warn",
+      {
+        "allowForKnownSafeCalls": [{ "from": "package", "name": "test", "package": "node:test" }]
+      }
+    ]
+  }
+}
