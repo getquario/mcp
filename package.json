@@ -1,6 +1,6 @@
 {
   "name": "@quario/mcp",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "An MCP server that exposes quario as validate and render tools. Local stdio, started with npx.",
   "keywords": [
     "agent",
