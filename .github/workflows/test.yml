@@ -9,19 +9,9 @@ on:
 permissions:
   contents: read
 
-# The shared workflow in getquario/meta also runs a browser job. This server
-# has no browser surface, so it runs the Node half alone.
+# This server has no browser surface, so the shared browser job is skipped.
 jobs:
   test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: "22"
-          cache: npm
-      - run: npm ci
-      - run: npm test
-      - run: npm run fallow:health
+    uses: getquario/meta/.github/workflows/test.yml@main
+    with:
+      browser: false
