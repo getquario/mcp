@@ -1,0 +1,97 @@
+{
+  "name": "@quario/mcp",
+  "version": "0.0.0",
+  "description": "An MCP server that exposes quario as validate and render tools. Local stdio, started with npx.",
+  "keywords": [
+    "agent",
+    "mcp",
+    "quario",
+    "report"
+  ],
+  "homepage": "https://getquario.com",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Robin van der Vleuten",
+    "email": "robin@webstronauts.com",
+    "url": "https://robinvdvleuten.nl"
+  },
+  "repository": "getquario/mcp",
+  "bin": {
+    "quario-mcp": "lib/bin.js"
+  },
+  "files": [
+    "lib"
+  ],
+  "type": "module",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "check": "run-s fmt:check lint fallow:lint size test fallow:health",
+    "commitlint": "commitlint",
+    "fallow": "run-s fallow:lint fallow:health",
+    "fallow:health": "fallow health --coverage coverage/coverage-final.json",
+    "fallow:lint": "fallow dead-code && fallow dupes",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "size": "size-limit",
+    "test": "run-s test:unit test:types",
+    "test:types": "tsc && attw --pack . --profile esm-only",
+    "test:unit": "c8 --100 --src lib/ --reporter=text --reporter=json node --disallow-code-generation-from-strings --test --test-concurrency=1 test/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.1.0",
+    "@quario/csv": "^0.10.0",
+    "@quario/docx": "^0.4.0",
+    "@quario/html": "^0.12.0",
+    "@quario/pdf": "^0.12.0",
+    "@quario/xlsx": "^0.11.0",
+    "quario": "^0.13.0"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.3",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "@modelcontextprotocol/client": "^2.1.0",
+    "@size-limit/preset-small-lib": "^14.0.0",
+    "@types/node": "^26.4.0",
+    "c8": "^12.0.0",
+    "fallow": "^3.25.0",
+    "npm-run-all": "^4.1.5",
+    "oxfmt": "^0.70.0",
+    "oxlint": "^1.85.0",
+    "oxlint-tsgolint": "^7.0.2002",
+    "size-limit": "^14.0.0",
+    "typescript": "^7.0.2"
+  },
+  "size-limit": [
+    {
+      "path": "lib/index.js",
+      "limit": "6 kB",
+      "ignore": [
+        "quario",
+        "@quario/html",
+        "@quario/pdf",
+        "@quario/xlsx",
+        "@quario/csv",
+        "@quario/docx",
+        "@modelcontextprotocol/server",
+        "node:fs",
+        "node:os",
+        "node:path"
+      ]
+    }
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
