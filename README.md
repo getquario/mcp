@@ -190,9 +190,20 @@ the factory's own message as an error. The csv target takes no options.
   so a link cannot leave the root. Without a data root, the server refuses `dataPath`.
 - The file holds JSON. A file that does not parse returns the server's own message, and never the
   file's text.
-- An image arrives as `{ "$base64": "<base64>" }`. An object whose only key is `$base64` decodes to
-  bytes before the render, at any depth, in inline data and in files alike. The definition reads
-  it as usual: `=$.input.logo`. A string that is not base64 is an error that names its path.
+- An image arrives in one of two forms. `{ "$image": "assets/logo.png" }` names a file inside the
+  data root. `{ "$base64": "<base64>" }` carries the bytes inline. Prefer `$image`, because a picture
+  in base64 costs the agent's context on every call.
+- An object whose only key is `$image` or `$base64` decodes to bytes before the render. This
+  happens at any depth, in inline data and in files alike. The definition reads the bytes as usual:
+  `=$.input.logo`.
+- An `$image` path resolves against the data root, also inside a `dataPath` file. The server tests
+  the path after it resolves symlinks. The file must be a PNG or a JPEG. The server reads no other
+  file. A data file reference therefore cannot copy an arbitrary file into a document. Without a data
+  root, the server refuses `$image`.
+- The server reads each file once per call, however many times the data names it.
+- A refusal is an error that names its path in the data, such as `$.input.logo`. That covers a
+  string that is not base64, and an `$image` that does not exist, leaves the root, or is not an
+  image.
 
 ### The output file
 
@@ -209,7 +220,7 @@ Every target writes a file and returns its location, never its content.
 
 ## Not in this release
 
-Registered functions, image references by path, host fonts, and remote transport.
+Registered functions, host fonts, and remote transport.
 
 ---
 
