@@ -5,7 +5,8 @@
 The server runs on the machine of the person who starts it. It reads data files and writes rendered output for an agent. The agent counts as an untrusted author.
 
 - The environment sets every trust-bearing option: the query budgets, the `href` schemes, the license key, the data root and the output directory. No tool argument can change them.
-- `dataPath` resolves inside the data root after the server resolves symlinks. Set `QUARIO_DATA_ROOT` to the smallest directory the agent needs.
+- `dataPath` and `$image` resolve inside the data root after the server resolves symlinks. Set `QUARIO_DATA_ROOT` to the smallest directory the agent needs.
+- `$image` reads PNG and JPEG files only. Any other file under the data root stays out of the output.
 - The server writes only into `QUARIO_OUT_DIR` and never overwrites a file.
 - A report definition is untrusted. The engine evaluates it without a string-to-code path.
 

@@ -8,7 +8,7 @@ Work is done when `npm run check` is green. Run it on Node 22 or later. A single
 
 - `lib/config.js` reads the environment and is the one place a startup failure is minted.
 - `lib/index.js` registers the two tools over `quario/schema.json`, hoisted so its `$defs` resolve from the tool's root. It validates only the envelope and leaves the definition to the engine's `plan`, because a located problem beats a subschema trail.
-- `lib/data.js` is the data-root check (after `realpath`) and the `$base64` decode.
+- `lib/data.js` is the data-root check (after `realpath`) and the `$base64` and `$image` decode. `$image` reads PNG and JPEG only, for the reason in [ADR 0002](docs/adr/0002-a-data-file-reference-reads-images-only.md).
 - `lib/output.js` is the never-overwrite writer: `wx`, then `-1`, `-2`, and so on.
 - `lib/bin.js` is the `quario-mcp` entry. The suite covers it by spawning it.
 
