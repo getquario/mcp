@@ -25,7 +25,7 @@ Work is done when `npm run check` is green. Run it on Node 22 or later. A single
 - Coverage of `lib/` is 100%, enforced by `c8 --100`.
 - `lib/index.d.ts` is hand-written. `checkJs` under `strict` keeps it honest, and `test/types.check.ts` pins the public types.
 - `oxlint-tsgolint` is the binary that runs the type-aware rules. Without it they drop silently.
-- Conventional Commits, at most 80 characters, checked by `commitlint.config.mjs` from `.githooks/commit-msg`. Enable it once per clone with `git config core.hooksPath .githooks`. Release notes are generated from these messages.
+- Conventional Commits, at most 80 characters, checked by `commitlint.config.mjs` from `.githooks/commit-msg`. Enable it once per clone with `git config core.hooksPath .githooks`. A change that ships carries a changeset (`npx changeset`). Its summary is the CHANGELOG entry, so write it for a user of the server.
 - The README is user-facing prose: no semicolons, one idea per sentence, active voice, and one word per action.
 
 ## Code comments

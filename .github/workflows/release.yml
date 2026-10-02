@@ -1,0 +1,23 @@
+# The npm trusted publisher for @quario/mcp is registered against this file's
+# name, not the shared workflow it calls.
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  # Re-runs a publish that failed after its tag and Release were created.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    uses: getquario/meta/.github/workflows/release.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    secrets:
+      RELEASE_PLEASE_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN }}

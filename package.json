@@ -20,6 +20,7 @@
     "quario-mcp": "lib/bin.js"
   },
   "files": [
+    "CHANGELOG.md",
     "lib"
   ],
   "type": "module",
@@ -59,6 +60,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.3",
+    "@changesets/cli": "^3.0.3",
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@modelcontextprotocol/client": "^2.1.0",
