@@ -44,6 +44,7 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "lint": "oxlint",
+    "release:version": "changeset version && node scripts/version.mjs",
     "size": "size-limit",
     "test": "run-s test:unit test:types",
     "test:types": "tsc && attw --pack . --profile esm-only",

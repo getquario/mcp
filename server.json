@@ -1,0 +1,51 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.getquario/mcp",
+  "title": "quario",
+  "description": "Validate and render quario report definitions (JSON) to PDF, Excel, Word, HTML or CSV.",
+  "websiteUrl": "https://getquario.com",
+  "repository": {
+    "url": "https://github.com/getquario/mcp",
+    "source": "github"
+  },
+  "version": "0.2.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@quario/mcp",
+      "version": "0.2.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "QUARIO_LICENSE",
+          "description": "The license key. Leave it unset to evaluate, and the output carries a watermark.",
+          "isSecret": true
+        },
+        {
+          "name": "QUARIO_DATA_ROOT",
+          "description": "The directory a dataPath resolves in. Defaults to CLAUDE_PROJECT_DIR when set."
+        },
+        {
+          "name": "QUARIO_OUT_DIR",
+          "description": "The directory rendered files are written to. Defaults to quario-mcp under the system temp dir."
+        },
+        {
+          "name": "QUARIO_LOCALE",
+          "description": "The default locale for numbers and dates.",
+          "default": "en-US"
+        },
+        {
+          "name": "QUARIO_CURRENCY",
+          "description": "The default currency, as an ISO 4217 code such as EUR."
+        },
+        {
+          "name": "QUARIO_TIME_ZONE",
+          "description": "The default time zone for dates.",
+          "default": "UTC"
+        }
+      ]
+    }
+  ]
+}
