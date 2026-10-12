@@ -80,6 +80,6 @@ test("invalid configuration throws with the variable named", (t) => {
   }
   // A scheme the engine refuses stops the server too, in the engine's words.
   assert.throws(() => createServer(configure({ QUARIO_SCHEMES: "HTTP", QUARIO_OUT_DIR: dir })), {
-    message: /^schemes: expected an array of lower-case URL schemes/,
+    message: /^options\.schemes: expected an array of lower-case URL schemes/,
   });
 });

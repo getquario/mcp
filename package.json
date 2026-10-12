@@ -52,12 +52,12 @@
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.1.0",
-    "@quario/csv": "^0.10.0",
-    "@quario/docx": "^0.4.0",
-    "@quario/html": "^0.12.0",
-    "@quario/pdf": "^0.12.0",
-    "@quario/xlsx": "^0.11.0",
-    "quario": "^0.13.0"
+    "@quario/csv": "^0.10.2",
+    "@quario/docx": "^0.5.1",
+    "@quario/html": "^0.13.1",
+    "@quario/pdf": "^0.14.0",
+    "@quario/xlsx": "^0.12.1",
+    "quario": "^0.15.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.3",
